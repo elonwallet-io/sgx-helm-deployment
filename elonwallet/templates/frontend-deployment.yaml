@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      tier: frontend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: frontend
+          image: 'dennisfaut/elonwallet-frontend-sgx'
+          ports:
+          - containerPort: 443
+          volumeMounts:
+          - mountPath: /data
+            name: data
+      volumes:
+      - name: data
+        hostPath:
+          path: /etc/frontend/data

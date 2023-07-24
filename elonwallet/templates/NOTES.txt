@@ -1,0 +1,2 @@
+elonmask installed successfully!
+Could take several seconds until all pods are up and all certificates are generated..

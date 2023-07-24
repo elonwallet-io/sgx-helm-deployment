@@ -1,0 +1,47 @@
+loader.entrypoint = "file:{{ gramine.libos }}"
+
+libos.entrypoint = "/usr/bin/caddy"
+loader.argv = ["/usr/bin/caddy", "run"]
+loader.log_level = "debug"
+sgx.debug = false
+loader.env.LD_LIBRARY_PATH = "/lib:{{ arch_libdir }}"
+loader.env.MALLOC_ARENA_MAX = "1"
+loader.insecure__use_cmdline_argv = true
+sgx.nonpie_binary = true
+sgx.edmm_enable = {{ 'true' if env.get('EDMM', '0') == '1' else 'false' }}
+
+fs.mounts = [
+    { path = "/tmp",              uri = "file:/tmp",        type = "tmpfs" },
+    { path = "/etc",              uri = "file:/etc" },
+    { path = "/usr",              uri = "file:/usr" },
+    { path = "/lib",              uri = "file:{{ gramine.runtimedir() }}" },
+    { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
+    { path = "/data",             uri = "file:/data" },
+]
+sgx.rpc_thread_num = 16
+sgx.thread_num = 16
+sgx.max_threads = 20
+sgx.enclave_size = "2G"
+
+sgx.allowed_files = [
+    "file:/data/",
+    "file:/etc/nsswitch.conf",
+    "file:/etc/ethers",
+    "file:/etc/hosts",
+    "file:/etc/group",
+    "file:/etc/ssl/certs/",
+    "file:/etc/ssl/certs/ca-certificates.crt",
+    "file:/etc/passwd",
+    "file:/etc/ssl/openssl.cnf",
+    "file:/etc/host.conf",
+    "file:/etc/resolv.conf",
+]
+
+
+sgx.trusted_files = [
+    "file:{{ gramine.libos }}",
+    "file:{{ gramine.runtimedir() }}/",
+    "file:{{ arch_libdir }}/",
+    "file:/etc/caddy/",
+    "file:/usr/share/caddy/",
+]

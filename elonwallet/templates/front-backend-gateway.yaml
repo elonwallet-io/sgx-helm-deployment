@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: front-backend-gateway
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: net-istio
+    app.kubernetes.io/name: knative-serving
+    app.kubernetes.io/version: "1.10.1"
+    networking.knative.dev/ingress-provider: istio
+spec:
+  selector:
+    istio: ingress
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "{{ .Values.domain }}"
+        - "api.{{ .Values.domain }}"
+    - port:
+        number: 443
+        name: https_
+        protocol: HTTPS
+      tls: 
+        mode: PASSTHROUGH
+      hosts:
+        - "{{ .Values.domain }}"
+        - "api.{{ .Values.domain }}"

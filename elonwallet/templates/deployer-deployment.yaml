@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployer-deployment
+  labels:
+    app: deployer
+spec:
+  selector:
+    matchLabels:
+      app: deployer
+      tier: deployer
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: deployer
+        tier: deployer
+        track: stable
+    spec:
+      containers:
+        - name: backend
+          image: 'dennisfaut/elonwallet-deployer-sgx:latest'
+          env:
+            - name: IMAGENAME
+              value: dennisfaut/elonwallet-function-sgx
+            - name: SERVERPORT
+              value: "8078"
+            - name: FRONTEND_URL
+              value: "https://{{ .Values.domain }}"
+            - name: FRONTEND_HOST
+              value: "{{ .Values.domain }}"
+            - name: BACKEND_URL
+              value: "https://api.{{ .Values.domain }}"
+            - name: SGX_ACTIVATE
+              value: "true"
+            - name: USE_WILDCARD_CERT
+{{- if and (not .Values.development) }}
+              value: "true"
+{{- else }}
+              value: "false"
+{{- end}} 
+          ports:
+          - containerPort: 8078

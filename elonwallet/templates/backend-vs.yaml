@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: backend-vs
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-weight": "0"
+spec:
+  gateways:
+  - knative-serving/front-backend-gateway
+  hosts:
+  - api.{{ .Values.domain }}
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - api.{{ .Values.domain }}
+    route:
+    - destination:
+        host: backend
+        port:
+          number: 443

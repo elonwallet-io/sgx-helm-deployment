@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+      tier: backend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: backend
+          image: 'dennisfaut/elonwallet-backend-sgx'
+          env:
+          - name: DB_CONNECTION_STRING
+            value: 'postgres://{{ .Values.postgres.user }}:{{ .Values.postgres.password }}@db-service:5444/{{ .Values.postgres.db }}?sslmode=disable'
+          - name: MORALIS_API_KEY
+            value: '{{ .Values.backend.moralis_api_key }}'
+          - name: FRONTEND_URL
+            value: 'https://{{ .Values.domain }}'
+          - name: BACKEND_HOST
+            value: 'api.{{ .Values.domain }}'
+          - name: DEPLOYER_URL
+            value: 'http://deployer-service:8079'
+          - name: EMAIL_USER
+            value: '{{ .Values.backend.email_user }}'
+          - name: EMAIL_PASSWORD
+            value: '{{ .Values.backend.email_password }}'
+          - name: EMAIL_AUTH_HOST
+            value: '{{ .Values.backend.email_auth_host }}'
+          - name: EMAIL_SMTP_HOST
+            value: '{{ .Values.backend.email_smtp_host }}'
+          - name: USE_INSECURE_HTTP
+            value: 'false'
+          - name: WALLET_PRIVATE_KEY_HEX
+            value: '{{ .Values.backend.wallet_private_key_hex }}'
+          - name: WALLET_ADDRESS
+            value: '{{ .Values.backend.wallet_address }}'
+          ports:
+          - containerPort: 8443
+          volumeMounts:
+          - mountPath: /data
+            name: data
+      volumes:
+      - name: data
+        hostPath:
+          path: /etc/backend/data

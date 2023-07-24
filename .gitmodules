@@ -1,0 +1,12 @@
+[submodule "sgx-deployments/backend/backend"]
+	path = sgx-deployments/backend/backend
+	url = https://github.com/elonwallet-io/backend.git
+[submodule "sgx-deployments/frontend/frontend"]
+	path = sgx-deployments/frontend/frontend
+	url = https://github.com/elonwallet-io/frontend.git
+[submodule "sgx-deployments/wallet-service/function"]
+	path = sgx-deployments/wallet-service/function
+	url = https://github.com/elonwallet-io/function.git
+[submodule "sgx-deployments/deployer/Knative-Client"]
+	path = sgx-deployments/deployer/Knative-Client
+	url = https://github.com/elonwallet-io/Knative-Client.git
