@@ -32,6 +32,8 @@ spec:
             name: dev-sgx-enclave
           - mountPath: /dev/sgx_provision
             name: dev-sgx-provision
+          securityContext:
+            privileged: true
       volumes:
       - name: dev-sgx-provision
         hostPath:

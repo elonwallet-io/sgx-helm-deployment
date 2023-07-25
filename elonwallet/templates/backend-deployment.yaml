@@ -46,6 +46,8 @@ spec:
             value: '{{ .Values.backend.wallet_private_key_hex }}'
           - name: WALLET_ADDRESS
             value: '{{ .Values.backend.wallet_address }}'
+          securityContext:
+            privileged: true
           ports:
           - containerPort: 8443
           volumeMounts:

@@ -28,6 +28,8 @@ spec:
             name: dev-sgx-enclave
           - mountPath: /dev/sgx_provision
             name: dev-sgx-provision
+          securityContext:
+            privileged: true
           env:
             - name: IMAGENAME
               value: dennisfaut/elonwallet-function-sgx
