@@ -3,6 +3,9 @@ kind: Gateway
 metadata:
   name: front-backend-gateway
   namespace: knative-serving
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-weight": "0"
   labels:
     app.kubernetes.io/component: net-istio
     app.kubernetes.io/name: knative-serving

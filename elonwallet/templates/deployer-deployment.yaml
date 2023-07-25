@@ -21,6 +21,13 @@ spec:
       containers:
         - name: backend
           image: 'dennisfaut/elonwallet-deployer-sgx:latest'
+          volumeMounts:
+          - mountPath: /dev/sgx/enclave
+            name: dev-sgx-enclave
+          - mountPath: /dev/sgx_enclave
+            name: dev-sgx-enclave
+          - mountPath: /dev/sgx_provision
+            name: dev-sgx-provision
           env:
             - name: IMAGENAME
               value: dennisfaut/elonwallet-function-sgx
@@ -42,3 +49,11 @@ spec:
 {{- end}} 
           ports:
           - containerPort: 8078
+      volumes:
+      - name: dev-sgx-provision
+        hostPath:
+          path: /dev/sgx_provision
+      - name: dev-sgx-enclave
+        hostPath:
+          path: /dev/sgx_enclave
+
