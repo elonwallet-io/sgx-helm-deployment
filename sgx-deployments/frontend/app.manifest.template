@@ -1,12 +1,9 @@
 loader.entrypoint = "file:{{ gramine.libos }}"
-
 libos.entrypoint = "/usr/bin/caddy"
 loader.argv = ["/usr/bin/caddy", "run"]
 loader.log_level = "debug"
 sgx.debug = false
 loader.env.LD_LIBRARY_PATH = "/lib:{{ arch_libdir }}"
-loader.env.MALLOC_ARENA_MAX = "1"
-loader.insecure__use_cmdline_argv = true
 sgx.nonpie_binary = true
 sgx.edmm_enable = {{ 'true' if env.get('EDMM', '0') == '1' else 'false' }}
 
@@ -43,5 +40,6 @@ sgx.trusted_files = [
     "file:{{ gramine.runtimedir() }}/",
     "file:{{ arch_libdir }}/",
     "file:/etc/caddy/",
+    "file:/usr/bin/caddy",
     "file:/usr/share/caddy/",
 ]

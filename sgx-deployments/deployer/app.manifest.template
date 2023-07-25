@@ -4,7 +4,7 @@ libos.entrypoint = "/app/app"
 
 loader.log_level = "debug"
 sgx.debug = false
-insecure__use_host_env = true
+loader.insecure__use_host_env = true
 # loader.env.USE_INSECURE_HTTP = ""
 # loader.env.FRONTEND_URL = ""
 # loader.env.FRONTEND_HOST = ""
@@ -19,10 +19,10 @@ fs.mounts = [
     { path = "/tmp",              uri = "file:/tmp",        type = "tmpfs" },
     { path = "/etc",              uri = "file:/etc" },
     { path = "/usr",              uri = "file:/usr" },
+    { path = "/var",              uri = "file:/var" },
     { path = "/lib",              uri = "file:{{ gramine.runtimedir() }}" },
     { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
     { path = "/app",              uri = "file:/app" },
-    { path = "/data",             uri = "file:/data" },
 ]
 sgx.rpc_thread_num = 16
 sgx.thread_num = 16
@@ -42,6 +42,7 @@ sgx.allowed_files = [
     "file:/etc/ssl/openssl.cnf",
     "file:/etc/host.conf",
     "file:/etc/resolv.conf",
+    "file:/var/run/secrets/kubernetes.io/serviceaccount/",
 ]
 
 
