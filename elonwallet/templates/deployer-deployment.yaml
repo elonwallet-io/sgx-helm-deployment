@@ -31,8 +31,8 @@ spec:
           securityContext:
             privileged: true
           env:
-            - name: IMAGENAME
-              value: dennisfaut/elonwallet-function-sgx
+            - name: IMAGE_WALLET_SERVICE
+              value: dennisfaut/elonwallet-wallet-service-sgx
             - name: SERVERPORT
               value: "8078"
             - name: FRONTEND_URL

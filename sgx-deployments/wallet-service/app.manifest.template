@@ -4,7 +4,7 @@ libos.entrypoint = "/app/app"
 
 loader.log_level = "debug"
 sgx.debug = false
-insecure__use_host_env = true
+loader.insecure__use_host_env = true
 # loader.env.USE_INSECURE_HTTP = ""
 # loader.env.FRONTEND_URL = ""
 # loader.env.FRONTEND_HOST = ""

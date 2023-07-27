@@ -12,7 +12,7 @@ RUN yarn install && \
 FROM gramineproject/gramine:v1.4
 ARG manifestPath
 RUN apt update \
-    && apt-get install -y xxd debian-keyring debian-archive-keyring apt-transport-https \
+    && apt-get install -y xxd debian-keyring debian-archive-keyring apt-transport-https curl \
     && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
     && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list \
     && apt update \
@@ -40,15 +40,9 @@ RUN chmod +x /usr/bin/caddy
 WORKDIR /app/
 
 COPY ./frontend/app.manifest.template ./entrypoint.sh /app/
-
-RUN gramine-sgx-gen-private-key \
-    && gramine-manifest -Darch_libdir=/lib/x86_64-linux-gnu app.manifest.template app.manifest \
-    && gramine-sgx-sign --manifest app.manifest --output app.manifest.sgx
-    
-
 EXPOSE 80
 EXPOSE 443
 EXPOSE 443/udp
 EXPOSE 2019
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+ENTRYPOINT [ "/usr/bin/caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

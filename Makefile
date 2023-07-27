@@ -14,7 +14,12 @@ dependencies:
 	helm install istiod istio/istiod --version 1.18.0  -n istio-system --set meshConfig.ingressService=istio-ingress --set meshConfig.ingressSelector=ingress --wait
 	helm install istio-ingress istio/gateway --version 1.18.0  -n istio-system --create-namespace --wait
 build:
-	docker build -t dennisfaut/elonwallet-backend-sgx --build-arg manifestPath=backend --build-arg path=backend/backend .
-	docker build -t dennisfaut/elonwallet-frontend-sgx --build-arg manifestPath=frontend --build-arg path=frontend/frontend/elonwallet.io .
-	docker build -t dennisfaut/elonwallet-deployer-sgx --build-arg manifestPath=deployer --build-arg path=deployer/Knative-Client/deployer .
-	docker build -t dennisfaut/elonwallet-wallet-service-sgx --build-arg manifestPath=wallet-service --build-arg path=wallet-service/function .
+	docker build -t $(account)/elonwallet-backend-sgx --build-arg manifestPath=backend --build-arg path=backend/backend ./sgx-deployments
+	docker build -t $(account)/elonwallet-frontend-sgx -f ./sgx-deployments/frontend.Dockerfile --build-arg manifestPath=frontend --build-arg path=frontend/frontend/elonwallet.io ./sgx-deployments
+	docker build -t $(account)/elonwallet-deployer-sgx --build-arg manifestPath=deployer --build-arg path=deployer/Knative-Client/deployer ./sgx-deployments
+	docker build -t $(account)/elonwallet-wallet-service-sgx --build-arg manifestPath=wallet-service --build-arg path=wallet-service/function ./sgx-deployments
+	docker push $(account)/elonwallet-backend-sgx
+	docker push $(account)/elonwallet-frontend-sgx
+	docker push $(account)/elonwallet-deployer-sgx
+	docker push $(account)/elonwallet-wallet-service-sgx
+	
