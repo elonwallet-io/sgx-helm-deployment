@@ -782,6 +782,8 @@ data:
   # This is the Go import path for the binary that is containerized
   # and substituted here.
   queue-sidecar-image: dennisfaut/queue-proxy
+  digest-resolution-timeout: "25s"
+  queue-sidecar-cpu-request: "100m"
   _example: |-
     ################################
     #                              #
@@ -937,6 +939,8 @@ metadata:
   annotations:
     knative.dev/example-checksum: "d3565159"
 data:
+  kubernetes.podspec-persistent-volume-claim: "enabled"
+  kubernetes.podspec-persistent-volume-write: "enabled"
   _example: |-
     ################################
     #                              #
@@ -1867,16 +1871,16 @@ spec:
               httpHeaders:
                 - name: k-kubelet-probe
                   value: "activator"
-            periodSeconds: 5
-            failureThreshold: 5
+            periodSeconds: 20
+            failureThreshold: 15
           livenessProbe:
             httpGet:
               port: 8012
               httpHeaders:
                 - name: k-kubelet-probe
                   value: "activator"
-            periodSeconds: 10
-            failureThreshold: 12
+            periodSeconds: 30
+            failureThreshold: 30
             initialDelaySeconds: 15
       # The activator (often) sits on the dataplane, and may proxy long (e.g.
       # streaming, websockets) requests.  We give a long grace period for the

@@ -1,20 +1,21 @@
 loader.entrypoint = "file:{{ gramine.libos }}"
 
-libos.entrypoint = "/app/app"
+libos.entrypoint = "/app/premain"
 
-loader.log_level = "debug"
-sgx.debug = false
-insecure__use_host_env = true
-# loader.env.USE_INSECURE_HTTP = ""
-# loader.env.FRONTEND_URL = ""
-# loader.env.FRONTEND_HOST = ""
-# loader.env.BACKEND_URL = ""
+loader.argv = [ "/app/app"]
+loader.env.ENCLAIVE_SERVER = { passthrough = true }
+loader.env.ENCLAIVE_NAME = "wallet-sgx"
+loader.env.domain = { passthrough = true }
+loader.env.BACKEND_URL = { passthrough = true }
+loader.env.FRONTEND_URL = { passthrough = true }
+loader.env.FRONTEND_HOST = { passthrough = true }
+loader.env.USE_INSECURE_HTTP = 'false'
 loader.env.LD_LIBRARY_PATH = "/lib:{{ arch_libdir }}"
 loader.env.MALLOC_ARENA_MAX = "1"
-loader.insecure__use_cmdline_argv = true
 sgx.nonpie_binary = true
 sgx.edmm_enable = {{ 'true' if env.get('EDMM', '0') == '1' else 'false' }}
-
+sgx.debug = false
+sgx.remote_attestation = "dcap"
 fs.mounts = [
     { path = "/tmp",              uri = "file:/tmp",        type = "tmpfs" },
     { path = "/etc",              uri = "file:/etc" },
@@ -23,12 +24,16 @@ fs.mounts = [
     { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
     { path = "/app",              uri = "file:/app" },
     { path = "/data",             uri = "file:/data" },
+    { path = "/certs",             uri = "file:/certs" },
 ]
 sgx.rpc_thread_num = 16
 sgx.thread_num = 16
 sgx.max_threads = 20
 sgx.enclave_size = "2G"
 sgx.allowed_files = [
+    "file:/certs/function-key.pem",
+    "file:/certs/ca.pem",
+    "file:/certs/function-cert.pem",
     "file:/data/signing_key.json",
     "file:/data/user_data.json",
     "file:/etc/nsswitch.conf",
@@ -49,4 +54,5 @@ sgx.trusted_files = [
     "file:{{ gramine.runtimedir() }}/",
     "file:{{ arch_libdir }}/",
     "file:/app/app",
+    "file:/app/premain",
 ]
