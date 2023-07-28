@@ -7,6 +7,6 @@
 [submodule "sgx-deployments/wallet-service/function"]
 	path = sgx-deployments/wallet-service/function
 	url = https://github.com/elonwallet-io/function.git
-[submodule "sgx-deployments/deployer/Knative-Client"]
-	path = sgx-deployments/deployer/Knative-Client
-	url = https://github.com/elonwallet-io/Knative-Client.git
+[submodule "sgx-deployments/deployer/--force"]
+	path = sgx-deployments/deployer/--force
+	url = git@github.com:elonwallet-io/Knative-Client.git
